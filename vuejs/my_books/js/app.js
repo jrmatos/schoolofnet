@@ -1,27 +1,15 @@
-var hello = new Vue({
-	el: '#hello',
+var app = new Vue({
+	el: '#app',
 	data: {
-		msg: 'Hello Vue!',
-		people: [
-			{ name: 'Paulo' },
-			{ name: 'Maria' },
-			{ name: 'Jorge' },
-			{ name: 'Lucia' },
-		],
-		newElement: '',
-		elements: []
+            books: []                
 	},
 	methods: {
-		addElement: function () {
-			var title = this.newElement.trim();
-			if(title) {
-				this.elements.push({ title: title });
-				this.newElement = '';
-			}
-		},
-		removeElement: function (e, index) {
-			e.preventDefault();
-			this.elements.splice(index, 1);
-		}
-	}
+		
+	},
+        ready: function () {
+            var that = this;
+            that.$http.get('dataServer.json').then(function (response) {
+                that.books = response.data;
+            });
+        }
 });
