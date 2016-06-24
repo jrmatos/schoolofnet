@@ -10,22 +10,49 @@
     <div class="container" id="app">
         <div class="row">
             <h1>Books</h1>
+            <div>
+                <input type="search" v-model="MySearch" class="form-control" placeholder="Search">
+            </div>
         </div>
         <div class="row">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Title</th>
-                        <th>Value</th>
-                        <th>Description</th>
+                        <th>
+                            <i class='fa fa-fw fa-sort'
+                               v-bind:class="{ 'fa-sort-amount-asc': orderCol === 'id' && orderInverse === 1 ,
+                               'fa-sort-amount-desc': orderCol === 'id' && orderInverse === -1 }"
+                            ></i>
+                            <a href="" @click="filterOrderBy($event, 'id')">Id</a>
+                        </th>
+                        <th>
+                            <i class='fa fa-fw fa-sort'
+                               v-bind:class="{ 'fa-sort-amount-asc': orderCol === 'title' && orderInverse === 1 ,
+                               'fa-sort-amount-desc': orderCol === 'title' && orderInverse === -1 }"
+                            ></i>
+                            <a href="" @click="filterOrderBy($event, 'title')">Title</a>
+                        </th>
+                        <th>
+                            <i class='fa fa-fw fa-sort'
+                               v-bind:class="{ 'fa-sort-amount-asc': orderCol === 'value' && orderInverse === 1 ,
+                               'fa-sort-amount-desc': orderCol === 'value' && orderInverse === -1 }"
+                            ></i>
+                            <a href="" @click="filterOrderBy($event, 'value')">Value</a>
+                        </th>
+                        <th>
+                            <i class='fa fa-fw fa-sort'
+                               v-bind:class="{ 'fa-sort-amount-asc': orderCol === 'description' && orderInverse === 1 ,
+                               'fa-sort-amount-desc': orderCol === 'description' && orderInverse === -1 }"
+                            ></i>
+                            <a href="" @click="filterOrderBy($event, 'description')">Description</a>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="book in books">
+                    <tr v-for="book in books | filterBy MySearch 'title' 'description' | orderBy orderCol orderInverse">
                         <td>{{book.id}}</td>
-                        <td>{{book.title}}</td>
-                        <td>{{book.value}}</td>
+                        <td>{{book.title | uppercase }}</td>
+                        <td>{{book.value | currency }}</td>
                         <td>{{book.description}}</td>
                     </tr>                    
                 </tbody>
@@ -33,7 +60,6 @@
         </div>
     </div>
     <!-- /component -->
-
 
     <script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
     <script type="text/javascript" src="node_modules/vue-resource/dist/vue-resource.js"></script>
