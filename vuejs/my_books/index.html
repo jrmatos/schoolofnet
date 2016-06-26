@@ -4,12 +4,15 @@
 	<title>My Books</title>
 	<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="node_modules/font-awesome/css/font-awesome.css">
+        <style>
+            [v-cloak] { display:none; }
+        </style>
 </head>
 <body class="container">
         
     <div class="container" id="app">
         <div class="row">
-            <h1>Books</h1>
+            <h1 v-cloak>{{title}}</h1>
             <div>
                 <input type="search" v-model="MySearch" class="form-control" placeholder="Search">
             </div>
@@ -49,7 +52,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="book in books | filterBy MySearch 'title' 'description' | orderBy orderCol orderInverse">
+                    <tr v-cloak v-for="book in books | filterBy MySearch 'title' 'description' | orderBy orderCol orderInverse">
                         <td>{{book.id}}</td>
                         <td>{{book.title | uppercase }}</td>
                         <td>{{book.value | currency }}</td>
@@ -57,6 +60,25 @@
                     </tr>                    
                 </tbody>
             </table>
+            <nav class="text-center">
+                <ul class="pagination">
+                    <li v-bind:class="{ 'disabled': pagination.current === 1 }">
+                        <a href="#" @click="previous" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li v-for="page in pagination.listPagination"
+                        v-bind:class="{ 'active': pagination.current === $index + 1 }">
+                        <a href="#" @click="pagePagination($event, $index)" v-cloak>{{ $index + 1 }}</a>
+                    </li>
+                    <li v-bind:class="{ 'disabled': pagination.current === pagination.totalPages }">
+                        <a href="#" @click="next" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
         </div>
     </div>
     <!-- /component -->
